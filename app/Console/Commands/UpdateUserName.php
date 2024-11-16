@@ -27,12 +27,19 @@ class UpdateUserName extends Command
      */
     public function handle()
     {
-        User::all()->map(function ($user) use (&$query) {
-            $user->update([
-                'first_name' => fake()->firstName(),
-                'last_name' => fake()->lastName(),
-                'timezone' => Arr::random(User::TIMEZONES),
-            ]);
-        });
+        try {
+
+            User::all()->map(function ($user) use (&$query) {
+                $user->update([
+                    'first_name' => fake()->firstName(),
+                    'last_name' => fake()->lastName(),
+                    'timezone' => Arr::random(User::TIMEZONES),
+                ]);
+            });
+
+            $this->info('Update Success');
+        } catch (\Throwable $th) {
+            $this->error($th->getMessage());
+        }
     }
 }
